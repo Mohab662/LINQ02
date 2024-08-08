@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,20 @@ using System.Xml.Linq;
 
 namespace LINQ02
 {
-    class Product
+    public class MyCustomCompare : IEqualityComparer<string>
+    {
+
+        public bool Equals(string? x, string? y)
+        {
+            return x==y;
+        }
+
+        public int GetHashCode([DisallowNull] string obj)
+        {
+            return obj.GetHashCode();
+        }
+    }
+        class Product : IComparable<Product>
     {
         public long ProductID { get; set; }
         public string ProductName { get; set; }
@@ -15,6 +29,10 @@ namespace LINQ02
         public decimal UnitPrice { get; set; }
         public int UnitsInStock { get; set; }
 
+        public int CompareTo(Product? other)
+        {
+           return this.UnitPrice.CompareTo(other.UnitPrice);
+        }
 
         public override string ToString()
             => $"ProductID:{ProductID},ProductName:{ProductName},Category{Category},UnitPrice:{UnitPrice},UnitsInStock:{UnitsInStock}";
